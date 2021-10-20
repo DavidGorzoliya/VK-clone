@@ -32,26 +32,20 @@ final class VKService {
             switch self {
             case .friends:
                 return [
-                    //"user_id" : String(Session.instance.userId),
                     "fields": "photo_50",
-                    //"access_token" : Session.instance.token
                 ]
             case .groups:
                 return [
-                    //"user_id" : String(Session.instance.userId),
                     "extended": "1",
-                    //"access_token" : Session.instance.token
                 ]
             case let .photos(ownerID):
                 return [
                     "owner_id": ownerID,
-                    //"access_token" : Session.instance.token
                 ]
             case let .searchGroup(searchText):
                 return [
                     "q": searchText,
                     "type": "group",
-                    //"access_token" : Session.instance.token
                 ]
             }
         }
@@ -59,8 +53,7 @@ final class VKService {
     
     
     func loadData(_ method: Method, complition: @escaping () -> Void ) {
-                
-        // конструктор для URL
+        
         var urlConstructor = URLComponents()
         urlConstructor.scheme = "https"
         urlConstructor.host = "api.vk.com"
@@ -70,22 +63,17 @@ final class VKService {
             URLQueryItem(name: "access_token", value: Session.instance.token),
             URLQueryItem(name: "v", value: "5.122")
         ]
-        let additionalQueryItems = method.parameters.map{ URLQueryItem(name: $0, value: $1) } //преобразуем словарь в нужный формат
+        let additionalQueryItems = method.parameters.map{ URLQueryItem(name: $0, value: $1) }
         urlConstructor.queryItems = basicQueryItems + additionalQueryItems
         
-        guard let url = urlConstructor.url else {  //проверка, что получился url
+        guard let url = urlConstructor.url else {
             complition()
             return
         }
         
-        // Конфигурация по умолчанию
         let configuration = URLSessionConfiguration.default
-        // собственная сессия
         let session =  URLSession(configuration: configuration)
-        
-        // задача для запуска
         let task = session.dataTask(with: url) { (data, response, error) in
-            //print("Запрос к API: \(url)")
             
             if let error = error {
                 print(error.localizedDescription)
@@ -95,7 +83,5 @@ final class VKService {
             complition()
         }
         task.resume()
-    }
-    
-    
+    }    
 }

@@ -8,30 +8,25 @@
 import UIKit
 import Kingfisher
 
-class FriendsPhotosViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let recognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
-        view.addGestureRecognizer(recognizer)
-        
-        //photoCurent.load(url: URL(string: allPhotos[countCurentPhoto])!)
-        //let xxx = allPhotos[countCurentPhoto].photo
-        photoCurent.kf.setImage(with: URL(string: allPhotos[countCurentPhoto].photo)) //работает через Kingfisher (с кэшем)
+final class FriendsPhotosViewController: UIViewController {
 
-    }
-    
     @IBOutlet weak var photoCurent: UIImageView!
-    
+
     var allPhotos:[Photo] = []
     var countCurentPhoto = 0
-    
-    
-    // MARK: - Animator
+
     var interactiveAnimator: UIViewPropertyAnimator!
-    
-    @objc func onPan(_ recognizer: UIPanGestureRecognizer) {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let recognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
+        view.addGestureRecognizer(recognizer)
+
+        photoCurent.kf.setImage(with: URL(string: allPhotos[countCurentPhoto].photo))
+    }
+
+    @objc private func onPan(_ recognizer: UIPanGestureRecognizer) {
         
         switch recognizer.state {
         case .began:
@@ -42,7 +37,7 @@ class FriendsPhotosViewController: UIViewController {
                 animations: {
                     self.photoCurent.alpha = 0.5
                     self.photoCurent.transform = .init(scaleX: 1.5, y: 1.5)
-            })
+                })
             interactiveAnimator.pauseAnimation()
             
         case .changed:
@@ -52,12 +47,12 @@ class FriendsPhotosViewController: UIViewController {
             
         case .ended:
             interactiveAnimator.stopAnimation(true)
-            if recognizer.translation(in: self.view).x < 0 { // проверка в какую сторону движется палец (лево/право)
-                if  countCurentPhoto < allPhotos.count - 1  { // проверка, что фотка будет в массиве и не делать счетчик больше
+            if recognizer.translation(in: self.view).x < 0 {
+                if  countCurentPhoto < allPhotos.count - 1  {
                     self.countCurentPhoto += 1
                 }
             } else {
-                if countCurentPhoto != 0 {  // проверка, что фотка будет в массиве и не делать счетчик меньше
+                if countCurentPhoto != 0 {
                     self.countCurentPhoto -= 1
                 }
             }
@@ -71,5 +66,4 @@ class FriendsPhotosViewController: UIViewController {
         }
         photoCurent.kf.setImage(with: URL(string: allPhotos[countCurentPhoto].photo))
     }
-    
 }

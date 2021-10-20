@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class Photo: Object {
+final class Photo: Object {
     @objc dynamic var photo: String = ""
     @objc dynamic var ownerID: String  = ""
     
@@ -16,8 +16,7 @@ class Photo: Object {
         self.photo = photo
         self.ownerID = ownerID
     }
-    
-    // этот инит обязателен для Object
+
     required override init() {
         super.init()
     }

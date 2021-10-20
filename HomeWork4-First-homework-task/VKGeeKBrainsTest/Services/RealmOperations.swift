@@ -14,9 +14,9 @@ class RealmOperations {
         do {
             let realm = try Realm()
             try realm.write{
-                let oldFriendList = realm.objects(Friend.self) // список существующих записей
-                realm.delete(oldFriendList) // удалить старые данные
-                realm.add(friendList) // записать новые данные
+                let oldFriendList = realm.objects(Friend.self)
+                realm.delete(oldFriendList)
+                realm.add(friendList)
             }
         } catch {
             print(error)
@@ -35,7 +35,7 @@ class RealmOperations {
             print(error)
         }
     }
-        
+
     func saveGroupsToRealm(_ grougList: [Group]) {
         do {
             let realm = try Realm()
@@ -59,5 +59,4 @@ class RealmOperations {
             print(error)
         }
     }
-    
 }

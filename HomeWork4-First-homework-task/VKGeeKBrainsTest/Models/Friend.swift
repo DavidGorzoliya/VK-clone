@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class Friend: Object {
+final class Friend: Object {
     @objc dynamic var userName: String = ""
     @objc dynamic var userAvatar: String  = ""
     @objc dynamic var ownerID: String  = ""
@@ -18,8 +18,7 @@ class Friend: Object {
         self.userAvatar = userAvatar
         self.ownerID = ownerID
     }
-    
-    // этот инит обязателен для Object
+
     required override init() {
         super.init()
     }

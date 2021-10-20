@@ -16,14 +16,9 @@ struct PhotosResponse: Decodable {
         var items: [Item]
         
         struct Item: Decodable {
-            //var album_id: Int
-            //var date: Int
-            //var id: Int
             var ownerID: Int
-            //var has_tags: Bool
             var sizes: [Sizes]
-            //var text: String
-            
+
             private enum CodingKeys: String, CodingKey {
                 case ownerID = "owner_id"
                 case sizes
@@ -37,27 +32,18 @@ struct PhotosResponse: Decodable {
             }
             
             struct Sizes: Decodable {
-                //var height: Int
                 var url: String
-                //var type: String
-                //var width: Int
             }
         }
     }
 }
 
+final class GetPhotosFriend {
 
-class GetPhotosFriend {
-    
-    //данные для авторизации в ВК
     func loadData(_ ownerID: String) {
-        
-        // Конфигурация по умолчанию
+
         let configuration = URLSessionConfiguration.default
-        // собственная сессия
         let session =  URLSession(configuration: configuration)
-        
-        // конструктор для URL
         var urlConstructor = URLComponents()
         urlConstructor.scheme = "https"
         urlConstructor.host = "api.vk.com"
@@ -67,12 +53,9 @@ class GetPhotosFriend {
             URLQueryItem(name: "access_token", value: Session.instance.token),
             URLQueryItem(name: "v", value: "5.122")
         ]
-              
-        // задача для запуска
+
         let task = session.dataTask(with: urlConstructor.url!) { (data, response, error) in
-            //print("Запрос к API: \(urlConstructor.url!)")
-            
-            // в замыкании данные, полученные от сервера, мы преобразуем в json
+
             guard let data = data else { return }
             
             do {
@@ -82,7 +65,6 @@ class GetPhotosFriend {
 
                 for i in 0...arrayPhotosFriend.response.items.count-1 {
                     if let urlPhoto = arrayPhotosFriend.response.items[i].sizes.last?.url {
-                        //ownerID = String(arrayPhotosFriend.response.items[i].owner_id)
                         ownerID = String(arrayPhotosFriend.response.items[i].ownerID)
                         photosFriend.append(Photo.init(photo: urlPhoto, ownerID: ownerID))
                     }
@@ -96,5 +78,4 @@ class GetPhotosFriend {
         }
         task.resume()
     }
-    
 }
